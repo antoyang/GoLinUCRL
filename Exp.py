@@ -48,7 +48,7 @@ def get_genre_ratings(ratings, movies, genres, column_names):
 
 Genres = ['Action','Adventure','Animation','Children','Comedy','Crime','Documentary','Drama','Fantasy','Horror','Musical','Mystery','Romance','Sci-Fi','Thriller','War','Western']
 Genres = ['Action','Thriller', 'Romance', 'Comedy', 'Drama', 'Crime', 'Adventure'] # Only consider most represented genres for now
-Genres = ['Action','Thriller', 'Romance', 'Comedy'] # Only consider most represented genres for now
+# Genres = ['Action','Thriller', 'Romance', 'Comedy'] # Only consider most represented genres for now
 
 genre_ratings = get_genre_ratings(ratings, movies, Genres, ['avg_'+ genre +'_rating' for genre in Genres])
 genre_ratings = genre_ratings.fillna(genre_ratings.mean())
@@ -107,9 +107,9 @@ def compute_theta(ratings, assignments, Genres, w, d):
 
     return(theta)
 
-# theta = compute_theta(ratings, assignments, Genres, w, d)
+theta = compute_theta(ratings, assignments, Genres, w, d)
 # np.save('thetaoracle.npy', theta)
-theta = np.load('thetaoracle.npy')
+# theta = np.load('thetaoracle.npy')
 
 #==============================================================================
 ## Construction of the graph
@@ -126,7 +126,7 @@ states = list(map(lambda s: str(list(s)),states))
 def similarity_function(x,y,var):
     return np.exp(-sd.euclidean(x,y)**2/(2*var))
 
-var = 5
+var = 1
 W = np.zeros((nUsers,nUsers))
 similarities = np.zeros((nUsers,nUsers))
 for i in range(nUsers):
@@ -342,7 +342,7 @@ if run_all:
         np.save(save + "optimal_arms"+ str(c) + ".npy", optimal_arms[c])
 
 else:
-    dir = "exp_T200_k3_nrepeat1_nclusters4_nactions4_20191214_150338/"
+    dir = "exp_T200_k2_nrepeat1_nclusters4_nactions4_var0.500000_20191216_105657/"
     golinucrl_empty_cumreward = np.load(dir + "golinucrl_cumreward.npy")
     golinucrl_empty_update_time = np.load(dir + "golinucrl_empty_update_time.npy")
     golinucrl_empty_user_sequence = np.load(dir + "golinucrl_empty_user_sequence.npy")
@@ -357,7 +357,7 @@ else:
         golinucrl_empty_arm_sequence[c] = np.load(dir + "golinucrl_empty_arm_sequence_%i.npy" %c)
         linucrl_cumreward[c] = np.load(dir + "linucrl_cumreward%i.npy" %c)
         linucrl_update_time[c] = np.load(dir + "linucrl%i_update_time.npy" %c)
-        oracle_cumreward = np.load(dir + "oracle_cumreward%i.npy" %c)
+        oracle_cumreward[c] = np.load(dir + "oracle_cumreward%i.npy" %c)
         optimal_arms[c] = np.load(dir + "optimal_arms"+ str(c) + ".npy")
         linucrl_arm_sequence[c] = np.load(dir + "linucrl%i_arm_sequence.npy" %c)
 
